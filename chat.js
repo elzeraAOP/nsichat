@@ -1,35 +1,47 @@
-function login() {
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
+// Initialisation de Firebase
+const firebaseConfig = {
+  apiKey: "TON_API_KEY",
+  authDomain: "TON_DOMAINE.firebaseapp.com",
+  databaseURL: "https://TON_DOMAINE.firebaseio.com",
+  projectId: "TON_PROJECT_ID",
+  storageBucket: "TON_DOMAINE.appspot.com",
+  messagingSenderId: "TON_SENDER_ID",
+  appId: "TON_APP_ID"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
 
-  firebase.auth().signInWithEmailAndPassword(email, password)
-    .then(() => {
-      document.getElementById('auth').style.display = 'none';
-      document.getElementById('chat').style.display = 'block';
-      listenForMessages();
-    })
-    .catch(error => alert("Erreur : " + error.message));
+// Récupérer le pseudo depuis localStorage
+const pseudo = localStorage.getItem('pseudo');
+if (!pseudo) {
+  window.location.href = "index.html";
 }
 
-function sendMessage() {
-  const msg = document.getElementById('messageInput').value;
-  if (msg.trim() === '') return;
+// Références DOM
+const form = document.getElementById('message-form');
+const input = document.getElementById('message');
+const messagesContainer = document.getElementById('messages');
 
-  const user = firebase.auth().currentUser;
-  firebase.database().ref("messages").push({
-    user: user.email,
-    message: msg,
-    timestamp: Date.now()
-  });
+// Envoyer un message
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const message = input.value.trim();
+  if (message) {
+    db.ref("messages").push({
+      pseudo,
+      message,
+      timestamp: Date.now()
+    });
+    input.value = '';
+  }
+});
 
-  document.getElementById('messageInput').value = '';
-}
-
-function listenForMessages() {
-  firebase.database().ref("messages").on("child_added", snapshot => {
-    const msg = snapshot.val();
-    const div = document.createElement("div");
-    div.textContent = `${msg.user}: ${msg.message}`;
-    document.getElementById("messages").appendChild(div);
-  });
-}
+// Écouter les nouveaux messages
+db.ref("messages").on("child_added", (snapshot) => {
+  const data = snapshot.val();
+  const msgDiv = document.createElement('div');
+  msgDiv.classList.add('message');
+  msgDiv.innerHTML = `<strong>${data.pseudo}</strong> : ${data.message}`;
+  messagesContainer.appendChild(msgDiv);
+  messagesContainer.scrollTop = messagesContainer.scrollHeight;
+});
