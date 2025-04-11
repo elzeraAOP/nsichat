@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Connexion - NSI Chat</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="login-container">
+    <h1>Connexion</h1>
+    <form id="login-form">
+      <input type="text" id="password" placeholder="Mot de passe" required />
+      <input type="text" id="pseudo" placeholder="Choisissez un pseudo" required />
+      <button type="submit">Connexion</button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById('login-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const password = document.getElementById('password').value.trim();
+      const pseudo = document.getElementById('pseudo').value.trim();
+      if (password === "latroussekayak" && pseudo) {
+        localStorage.setItem('pseudo', pseudo);
+        window.location.href = "chat.html";
+      } else {
+        alert("Mot de passe incorrect.");
+      }
+    });
+  </script>
+</body>
+</html>
