@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Chat sécurisé</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database-compat.js"></script>
+</head>
+<body>
+  <div id="auth">
+    <input id="email" type="email" placeholder="Email">
+    <input id="password" type="password" placeholder="Mot de passe">
+    <button onclick="login()">Connexion</button>
+  </div>
+
+  <div id="chat" style="display:none;">
+    <div id="messages"></div>
+    <input id="messageInput" type="text" placeholder="Message...">
+    <button onclick="sendMessage()">Envoyer</button>
+  </div>
+
+  <script src="firebase-config.js"></script>
+  <script src="chat.js"></script>
+</body>
+</html>
