@@ -1,22 +1,38 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <title>Accès sécurisé</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Connexion au Chat</title>
+  <style>
+    body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; }
+    #login { display: flex; flex-direction: column; gap: 10px; width: 300px; }
+    input, button { padding: 10px; font-size: 1em; }
+  </style>
 </head>
 <body>
-  <h2>Entrez le mot de passe pour accéder au chat</h2>
-  <input type="password" id="password" placeholder="Mot de passe" />
-  <button onclick="checkPassword()">Connexion</button>
-
+  <div id="login">
+    <input type="text" id="pseudo" placeholder="Choisis un pseudo">
+    <input type="password" id="password" placeholder="Mot de passe">
+    <button onclick="login()">Connexion</button>
+    <p id="error" style="color:red;"></p>
+  </div>
   <script>
-    function checkPassword() {
-      const password = document.getElementById("password").value;
-      if (password === "latroussekayak") {
-        window.location.href = "chat.html"; // page du chat
-      } else {
-        alert("Mot de passe incorrect.");
+    const PASSWORD = "latroussekayak";
+    function login() {
+      const pseudo = document.getElementById("pseudo").value.trim();
+      const pass = document.getElementById("password").value;
+      if (pass !== PASSWORD) {
+        document.getElementById("error").innerText = "Mot de passe incorrect.";
+        return;
       }
+      if (!pseudo) {
+        document.getElementById("error").innerText = "Choisis un pseudo.";
+        return;
+      }
+      sessionStorage.setItem("pseudo", pseudo);
+      window.location.href = "chat.html";
     }
   </script>
 </body>
